@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update
-from app.api.auth import admin_user, fastapi_users
+from app.api.auth import UserManager, admin_user, get_user_manager
 from app.models.user import User
 from app.core.db import get_db
 from app.schemas import UserRead, UserCreate, UserUpdate
@@ -14,7 +14,8 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 @router.get("/users", response_model=List[dict])
 async def list_users(
     current_user: User = Depends(admin_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    user_manager=Depends(get_user_manager),
 ):
     """List all users (admin only)"""
     result = await db.execute(select(User))
@@ -48,10 +49,7 @@ async def create_user(
     
     # Create user using FastAPI-Users manager
     try:
-        user_db = fastapi_users.get_user_db(db)
-        user_manager = fastapi_users.get_user_manager(user_db)
-        
-        user = await user_manager.create(user_create)
+        user = await user_manager.create(user_create, safe=True)
         return {
             "id": str(user.id),
             "email": user.email,

@@ -29,16 +29,23 @@ const AIDetectionPage = () => {
                 }),
             });
 
-            if (!response.ok) throw new Error('Analysis failed');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.detail || 'Analysis failed');
+            }
 
             const data = await response.json();
-            setResult(data.data);
+            setResult(data);
         } catch (e: any) {
             setError(e.message);
         } finally {
             setIsLoading(false);
         }
     };
+
+    const score = typeof result?.score === 'number' ? result.score : null;
+    const isAi = score !== null ? score >= threshold : null;
+    const classification = isAi === null ? 'N/A' : (isAi ? 'Likely AI' : 'Likely Human');
 
     return (
         <div className="container" style={{ padding: '40px 0' }}>
@@ -139,20 +146,26 @@ const AIDetectionPage = () => {
                                 <div>
                                     <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '4px' }}>AI Probability</p>
                                     <p className="text-gradient-primary" style={{ fontSize: '28px', fontWeight: 700 }}>
-                                        {(result.score * 100).toFixed(1)}%
+                                        {score !== null ? `${(score * 100).toFixed(1)}%` : 'N/A'}
                                     </p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Classification</p>
-                                    <p style={{ fontSize: '18px', fontWeight: 600 }}>{result.label || 'N/A'}</p>
+                                    <p style={{ fontSize: '18px', fontWeight: 600 }}>{classification}</p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Confidence</p>
-                                    <p style={{ fontSize: '16px', fontWeight: 500 }}>{result.confidence ? `${(result.confidence * 100).toFixed(1)}%` : 'N/A'}</p>
+                                    <p style={{ fontSize: '16px', fontWeight: 500 }}>
+                                        {typeof result.confidence === 'number' ? `${(result.confidence * 100).toFixed(1)}%` : 'N/A'}
+                                    </p>
                                 </div>
                                 <div>
                                     <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Provider</p>
                                     <p style={{ fontSize: '16px', fontWeight: 500, textTransform: 'capitalize' }}>{result.provider || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '4px' }}>Threshold Used</p>
+                                    <p style={{ fontSize: '16px', fontWeight: 500 }}>{Math.round(threshold * 100)}%</p>
                                 </div>
                             </div>
                         </div>

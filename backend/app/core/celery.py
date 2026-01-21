@@ -1,3 +1,4 @@
+import os
 from celery import Celery
 from app.core.config import settings
 
@@ -13,9 +14,12 @@ app.conf.update(
     result_serializer='json',
     timezone='UTC',
     enable_utc=True,
+    imports=("app.services.batch_processing",),
 )
 
-
+# Windows can't use prefork reliably; use solo to avoid permission errors.
+if os.name == "nt":
+    app.conf.worker_pool = "solo"
 
 # Import tasks
 app.autodiscover_tasks(['app.services'])

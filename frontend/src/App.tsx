@@ -6,6 +6,7 @@ import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import DashboardPage from './components/DashboardPage';
+import BatchesPage from './components/BatchesPage';
 import UploadForm from './components/UploadForm';
 import AIDetectionPage from './components/AIDetectionPage';
 import AdminPage from './components/AdminPage';
@@ -22,6 +23,7 @@ function App() {
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="batches" element={<BatchesPage />} />
             <Route path="upload" element={<UploadForm />} />
             <Route path="ai-check" element={<AIDetectionPage />} />
             <Route path="admin" element={<ProtectedRoute requiredRole="admin"><AdminPage /></ProtectedRoute>} />

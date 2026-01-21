@@ -52,6 +52,7 @@ const UploadForm = () => {
 
             const data = await response.json();
             setBatchId(data.batch_id); // V1 returns direct object, not nested data
+            localStorage.setItem('last_batch_id', data.batch_id);
             setFiles([]);
         } catch (e: any) {
             setError(e.message);
@@ -256,8 +257,14 @@ const UploadForm = () => {
                         <p style={{ fontSize: '18px', marginBottom: '24px', color: 'var(--success)', fontWeight: 700 }}>
                             Upload successful! Analysis in progress.
                         </p>
+                        <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '16px' }}>
+                            Batch ID: {batchId}
+                        </p>
                         <Link to={`/dashboard`} className="btn-secondary" style={{ display: 'inline-flex', padding: '14px 32px', borderRadius: '14px', textDecoration: 'none', fontWeight: 700 }}>
                             Go to Dashboard →
+                        </Link>
+                        <Link to={`/batch/${batchId}`} className="btn-primary" style={{ display: 'inline-flex', padding: '14px 32px', borderRadius: '14px', textDecoration: 'none', fontWeight: 700, marginLeft: '12px' }}>
+                            View Results
                         </Link>
                     </div>
                 )}

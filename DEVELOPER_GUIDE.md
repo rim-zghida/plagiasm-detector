@@ -7,6 +7,7 @@ This guide provides instructions for setting up the development environment and 
 ## New Features Overview
 
 The system has been enhanced with:
+
 - **Role-based Access Control**: Admin, moderator, and user roles
 - **User Management**: Admin panel for managing users
 - **Database Seeding**: Automatic setup of initial data
@@ -26,27 +27,32 @@ The system has been enhanced with:
 ### Backend Setup
 
 1. Navigate to the backend directory:
+
 ```bash
 cd backend
 ```
 
 2. Install dependencies using Poetry:
+
 ```bash
 poetry install
 ```
 
 3. Activate the virtual environment:
+
 ```bash
 poetry shell
 ```
 
 4. Create a development environment file:
+
 ```bash
 cp .env.docker.example .env.docker
 # Edit .env.docker with your development settings
 ```
 
 5. Run the backend locally:
+
 ```bash
 cd app
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
@@ -55,16 +61,19 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ### Frontend Setup
 
 1. Navigate to the frontend directory:
+
 ```bash
 cd frontend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -72,6 +81,7 @@ npm run dev
 ## Project Structure
 
 ### Backend Structure
+
 ```
 backend/
 ├── app/
@@ -96,6 +106,7 @@ backend/
 ```
 
 ### Frontend Structure
+
 ```
 frontend/
 ├── src/
@@ -117,6 +128,7 @@ frontend/
 ### Adding New Features
 
 1. Create a new branch:
+
 ```bash
 git checkout -b feature/new-feature-name
 ```
@@ -125,12 +137,14 @@ git checkout -b feature/new-feature-name
 3. Write tests for your new functionality
 4. Update documentation if needed
 5. Commit your changes:
+
 ```bash
 git add .
 git commit -m "Add new feature: description of changes"
 ```
 
 6. Push and create a pull request:
+
 ```bash
 git push origin feature/new-feature-name
 ```
@@ -140,6 +154,7 @@ git push origin feature/new-feature-name
 #### Creating New API Endpoints
 
 1. Define the endpoint in the appropriate router file:
+
 ```python
 # In app/api/v1/routes.py
 @router.get("/new-endpoint")
@@ -148,6 +163,7 @@ async def new_endpoint():
 ```
 
 2. Create Pydantic models for request/response validation:
+
 ```python
 from pydantic import BaseModel
 
@@ -157,6 +173,7 @@ class NewRequest(BaseModel):
 ```
 
 3. Add authentication if required:
+
 ```python
 from app.api.auth import fastapi_users, admin_user, mod_or_admin_user
 
@@ -183,6 +200,7 @@ async def mod_endpoint(
 ```
 
 4. Create new admin endpoints in the admin API module:
+
 ```python
 # In app/api/admin.py
 @router.get("/admin/custom-action")
@@ -193,6 +211,7 @@ async def custom_admin_action(
     # Admin-only functionality
     return {"message": "Success"}
 ```
+
 #### Creating New Services
 
 1. Create a new service file in `app/services/`
@@ -206,10 +225,11 @@ async def custom_admin_action(
 
 1. Create a new component file in `src/components/`
 2. Use TypeScript interfaces for props:
+
 ```tsx
 interface MyComponentProps {
-    title: string;
-    items: string[];
+  title: string;
+  items: string[];
 }
 ```
 
@@ -219,22 +239,24 @@ interface MyComponentProps {
 #### API Integration
 
 1. Use the existing authentication pattern:
+
 ```tsx
-const token = localStorage.getItem('token');
-const response = await fetch('/api/endpoint', {
-    headers: { 'Authorization': `Bearer ${token}` }
+const token = localStorage.getItem("token");
+const response = await fetch("/api/endpoint", {
+  headers: { Authorization: `Bearer ${token}` },
 });
 ```
 
 2. Implement proper error handling:
+
 ```tsx
 try {
-    const response = await fetch('/api/endpoint');
-    if (!response.ok) throw new Error('Request failed');
-    const data = await response.json();
+  const response = await fetch("/api/endpoint");
+  if (!response.ok) throw new Error("Request failed");
+  const data = await response.json();
 } catch (error) {
-    console.error(error);
-    // Handle error appropriately
+  console.error(error);
+  // Handle error appropriately
 }
 ```
 
@@ -243,17 +265,20 @@ try {
 ### Backend Testing
 
 Run all backend tests:
+
 ```bash
 cd backend
 poetry run pytest
 ```
 
 Run specific test file:
+
 ```bash
 poetry run pytest tests/test_specific_file.py
 ```
 
 Run tests with coverage:
+
 ```bash
 poetry run pytest --cov=app
 ```
@@ -261,6 +286,7 @@ poetry run pytest --cov=app
 ### Frontend Testing
 
 Run frontend tests:
+
 ```bash
 cd frontend
 npm test
@@ -290,12 +316,14 @@ npm test
 
 1. Make changes to models in `app/models/`
 2. Generate migration:
+
 ```bash
 cd backend
 poetry run alembic revision --autogenerate -m "Description of changes"
 ```
 
 3. Apply migration:
+
 ```bash
 poetry run alembic upgrade head
 ```
@@ -341,6 +369,7 @@ ENVIRONMENT=development
 ### Database Seeding
 
 The system automatically creates:
+
 - Database tables on first startup
 - Admin user account with credentials from environment variables
 - Sample user accounts for testing
@@ -350,11 +379,13 @@ The seeding process happens automatically when the application starts up. You ca
 ```bash
 python -m app.core.database_seed
 ```
+
 ## Debugging
 
 ### Backend Debugging
 
 1. Use logging for debugging:
+
 ```python
 import logging
 logger = logging.getLogger(__name__)
@@ -362,6 +393,7 @@ logger.debug("Debug message")
 ```
 
 2. Run with debug flag:
+
 ```bash
 uvicorn app.main:app --reload --debug
 ```
@@ -396,12 +428,14 @@ Before pushing to production:
 ### Adding New Dependencies
 
 Backend (using Poetry):
+
 ```bash
 poetry add package-name
 poetry export -o requirements.txt
 ```
 
 Frontend (using npm):
+
 ```bash
 npm install package-name
 ```

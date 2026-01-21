@@ -30,6 +30,7 @@ const DashboardPage = () => {
     }, []);
 
     const avg = metrics ? (metrics.num_documents / metrics.num_batches || 0).toFixed(1) : 0;
+    const lastBatchId = localStorage.getItem('last_batch_id');
 
     return (
         <div className="container fade-in" style={{ padding: '60px 0' }}>
@@ -65,6 +66,15 @@ const DashboardPage = () => {
                 >
                     <span>📊</span> Export CSV Data
                 </button>
+                {lastBatchId && (
+                    <Link
+                        to={`/batch/${lastBatchId}`}
+                        className="btn-primary"
+                        style={{ padding: '12px 24px', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}
+                    >
+                        View Latest Results
+                    </Link>
+                )}
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px', marginBottom: '60px' }}>

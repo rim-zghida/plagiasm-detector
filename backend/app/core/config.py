@@ -1,9 +1,19 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
+from pathlib import Path
 import os
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+ENV_FILE = BASE_DIR / ".env.docker"
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=ENV_FILE,
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
     DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql+asyncpg://user:password@db:5432/plagiarism_db")
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-super-secret-key-change-in-production")
     ALGORITHM: str = "HS256"

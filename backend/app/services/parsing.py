@@ -12,8 +12,23 @@ async def extract_text_from_file(file: UploadFile) -> str:
     """
     Extracts text from a file, supporting .txt, .docx, .pdf, and image formats (.png, .jpg, .jpeg).
     """
-    content = await file.read()
-    filename = file.filename.lower()
+    content = None
+    if isinstance(file, (bytes, bytearray)):
+        content = bytes(file)
+    else:
+        read_fn = getattr(file, "read", None)
+        if read_fn is None:
+            raise TypeError("File object does not support read().")
+        content = read_fn()
+        if hasattr(content, "__await__"):
+            content = await content
+
+    filename = ""
+    if hasattr(file, "filename") and file.filename:
+        filename = file.filename
+    elif hasattr(file, "name") and file.name:
+        filename = file.name
+    filename = filename.lower()
 
     if filename.endswith(".docx"):
         doc = docx.Document(io.BytesIO(content))

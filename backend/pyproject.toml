@@ -43,6 +43,7 @@ pdf2image = "^1.17.0"
 reportlab = "^4.0.7"
 loguru = "^0.7.2"
 prometheus-fastapi-instrumentator = "^6.0.0"
+bcrypt = "<4"
 
 [tool.poetry.group.ai.dependencies]
 # AI/ML Models and Transformers

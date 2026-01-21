@@ -1,7 +1,6 @@
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_users import FastAPIUsers
-from fastapi_users.authentication import JWTStrategy, AuthenticationBackend, CookieTransport
+from fastapi_users.authentication import JWTStrategy, AuthenticationBackend, BearerTransport
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users.exceptions import UserAlreadyExists
 from fastapi_users.manager import BaseUserManager, UUIDIDMixin
@@ -22,8 +21,8 @@ from passlib.context import CryptContext
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-# Cookie transport for secure sessions
-cookie_transport = CookieTransport(cookie_name="plagiarism_auth", cookie_max_age=3600, cookie_httponly=True, cookie_secure=True)
+# Bearer transport for JWT tokens
+bearer_transport = BearerTransport(tokenUrl="api/v1/auth/jwt/login")
 
 
 def get_jwt_strategy() -> JWTStrategy:
@@ -33,7 +32,7 @@ def get_jwt_strategy() -> JWTStrategy:
 # Authentication backend
 auth_backend = AuthenticationBackend(
     name="jwt",
-    transport=cookie_transport,
+    transport=bearer_transport,
     get_strategy=get_jwt_strategy,
 )
 
@@ -65,6 +64,25 @@ async def get_user_manager(user_db=Depends(get_user_db)):
 fastapi_users = FastAPIUsers[User, UUID](
     get_user_manager,
     [auth_backend],
+)
+
+router = APIRouter()
+router.include_router(
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/jwt",
+    tags=["auth"],
+)
+router.include_router(
+    fastapi_users.get_register_router(UserRead, UserCreate),
+    tags=["auth"],
+)
+router.include_router(
+    fastapi_users.get_reset_password_router(),
+    tags=["auth"],
+)
+router.include_router(
+    fastapi_users.get_verify_router(UserRead),
+    tags=["auth"],
 )
 
 

@@ -33,6 +33,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <Link to="/dashboard" className="btn-secondary" style={{ textDecoration: 'none', padding: '10px 20px', fontSize: '14px' }}>Dashboard</Link>
+              <Link to="/batches" className="btn-secondary" style={{ textDecoration: 'none', padding: '10px 20px', fontSize: '14px' }}>Results</Link>
               <Link to="/upload" className="btn-secondary" style={{ textDecoration: 'none', padding: '10px 20px', fontSize: '14px' }}>Upload</Link>
               <Link to="/ai-check" className="btn-secondary" style={{ textDecoration: 'none', padding: '10px 20px', fontSize: '14px' }}>AI Check</Link>
               {user && user.role === 'admin' && (
