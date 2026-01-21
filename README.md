@@ -1,7 +1,4 @@
 # 🛡️ Plagiarism & AI Detection System
-
-A production-ready, open-source plagiarism and AI-generated content detection system with a premium UI and flexible deployment options. The system supports multiple users with role-based access control and automated database seeding.
-
 ## 🌟 Features
 
 - **Semantic Plagiarism Detection**: Uses `pgvector` and `sentence-transformers` to detect similarities based on meaning, not just exact word matches.
@@ -21,13 +18,9 @@ This guide is designed to get you up and running in minutes, regardless of your 
 ### 1. Install Docker (One-time setup)
 Docker is the engine that runs the application. Think of it like a "virtual machine" that contains everything the app needs.
 
-- **Windows**: Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/). Ensure "WSL 2" is enabled during installation.
-- **macOS**: Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-- **Linux**: Follow the [official Docker installation guide](https://docs.docker.com/engine/install/).
-
 ### 2. Get the Code
-- **Coders**: `git clone https://github.com/Kyle6012/plagiarism-detection.git`
-- **Non-Coders**: Click the green **"Code"** button at the top of this page and select **"Download ZIP"**. Extract the ZIP file to a folder on your computer.
+- **Clone the repo**: `git clone https://github.com/rim-zghida/plagiasm-detector.git`
+
 
 ### 3. Configure Environment Variables
 Create a copy of the example environment file:
@@ -209,12 +202,6 @@ The system follows a microservices architecture with the following components:
 - **[Plagiarism Detection](./docs/plagiarism.md)** - Plagiarism algorithms, similarity metrics, and implementation
 - **[Providers](./docs/providers.md)** - External service providers and integration details
 
-## 🧪 Testing
-
-Run backend tests:
-```bash
-docker-compose exec api pytest backend/tests
-```
 
 ## 📄 License
 
